@@ -1,0 +1,241 @@
+<?php // 
+/**
+ * Implements hook_permisstion().
+ */
+function our_skills_permission() {
+  return array(
+      'administer skills' => array(
+          'title' => t('Form Skills'),
+          'description' => t('Perform administration tasks for Form Skills.'),
+      ),
+  );
+}
+//
+///**
+// * Implements hook_menu().
+// */
+function our_skills_menu() {
+  $items['form-skills'] = array(
+      'title' => 'Form Skills',
+      'type' => MENU_NORMAL_ITEM,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('our_skills_form'),
+      'access arguments' => array('administer skills'),
+  );
+  $items['admin/content/info-settings'] = array(
+      'title' => 'Info settings',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('info_settings_form'),
+      'access arguments' => array('access content'),
+  );
+  return $items;
+}
+//
+///**
+//
+// */
+function our_skills_form($form, &$form_state) {
+  $form['skill_name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Your Skill'),
+      '#description' => t('Please enter your skill'),
+      '#required' => TRUE,
+  );
+
+
+  $form['skill_number'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Your Skill Number'),
+      '#description' => t('Please enter your skill number'),
+      '#required' => TRUE,
+  );
+
+
+  $form['skill_info'] = array(
+      '#title'
+      => t('Your Skill Information'),
+      '#type' => 'textarea',
+      '#default_value' => '',
+      '#description' => t
+          ('Please enter your skill information'),
+      '#required' => TRUE,
+  );
+  $form['skill_submit'] = array(
+      '#type' => 'submit',
+      '#value' => T('Add Form Skills'),
+  );
+  return $form;
+}
+//
+function our_skills_form_validate($form, &$form_state) {
+  //print('<pre>'.  print_r($form_state['values'],1) .'</pre>');die();
+  if (!is_numeric($form_state['values']['skill_number'])) {
+    form_set_error('skill_number', t('Please enter your Number Skill is number'));
+    return false;
+  }
+  if ($form_state['values']['skill_number'] > 100) {
+    form_set_error('skill_number', t('Please enter your number skills is vaild smaller 100 '));
+    return false;
+  }
+  return true;
+}
+//
+function our_skills_form_submit($form, &$form_state) {
+
+  $user_id = db_insert('ourskills')
+      ->fields(array(
+          'skill_name' => $form_state['values']['skill_name'],
+          'skill_number' => $form_state['values']['skill_number'],
+          'skill_info' => $form_state['values']['skill_info']
+      ))
+      ->execute();
+  drupal_get_messages(t('You add Form Skill success'));
+}
+//
+// hook_custom_theme();
+function our_skills_custom_theme() {
+  if (arg(0) == 'form-skills') {
+    return 'seven';
+  }
+  if (arg(0) == 'admin/content/info-settings') {
+    return 'seven';
+  }
+}
+//
+////----------------------------------------------------------------------------
+function our_skills_block_info() {
+  // This example comes from node.module.
+  $blocks['skills'] = array(
+      'info' => t('Our Skill'),
+      'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+//
+function our_skills_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+  switch ($delta) {
+    case 'skills':
+      $items_skill = customtem_get_out_ourskills();
+//      print_r($items_skill);
+//      die();
+      $block['subject'] = t('');
+      $block['content'] = theme('theme_display', array('skill' => $items_skill));
+      break;
+  }
+  return $block;
+}
+//
+function our_skills_theme($existing, $type, $theme, $path) {
+  return array(
+      'theme_display' => array(
+          'template' => 'template/ourskill_theme', //leave off tpl.php
+          'variables' => array(),
+      ),
+  );
+}
+
+function get_value() {
+  $value = array(
+      'footer_text' => variable_get('footer_text'),
+      'fb' => variable_get('link_facebook'),
+      'tw' => variable_get('link_twitter'),
+      'db' => variable_get('link_dribbble'),
+      'li' => variable_get('link_linkedin'),
+      'phone' => variable_get('phone'),
+      'email' => variable_get('email'),
+      'address' => variable_get('address'),
+      'contact' => variable_get('content_contact'),
+      'skill' => variable_get('content_our_skill')
+  );
+  return $value;
+}
+
+function our_skills_preprocess_page(&$vars) {
+  $vars['items'] = get_value();
+}
+
+function customtem_get_out_ourskills() {
+  //$file_uri = file_create_url(file_build_uri('images/'));
+
+  $query = db_select('ourskills', 'our');
+  $query->fields('our', array('skill_name'))
+      ->fields('our', array('skill_number'))
+      ->fields('our', array('skill_info'));
+  $result = $query->execute()->fetchAll();
+  return $result;
+}
+//
+function info_settings_form($form, &$form_state) {
+  $form = array();
+
+  $form['link_facebook'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Facebok'),
+      '#default_value' => variable_get('link_facebook'),
+      '#required' => TRUE,
+  );
+
+  $form['link_twitter'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Twitter'),
+      '#default_value' => variable_get('link_twitter'),
+      '#required' => TRUE,
+  );
+
+  $form['link_dribbble'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Bribbble'),
+      '#default_value' => variable_get('link_dribbble'),
+      '#required' => TRUE,
+  );
+  $form['link_linkedin'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Linkedin'),
+      '#default_value' => variable_get('link_linkedin'),
+      '#required' => TRUE,
+  );
+
+  $form['footer_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Footer Text'),
+      '#default_value' => variable_get('footer_text'),
+      '#required' => TRUE,
+  );
+  $form['phone'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Number Phone'),
+      '#default_value' => variable_get('phone'),
+      '#required' => TRUE,
+  );
+  $form['email'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Email'),
+      '#default_value' => variable_get('email'),
+      '#required' => TRUE,
+  );
+  $form['address'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Address'),
+      '#default_value' => variable_get('address'),
+      '#required' => TRUE,
+  );
+  $form['content_our_skill'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Content Out Web Design Skills'),
+      '#default_value' => variable_get('content_our_skill'),
+      '#required' => TRUE,
+  );
+  $form['content_contact'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Content Contact'),
+      '#default_value' => variable_get('content_contact'),
+      '#required' => TRUE,
+  );
+  return system_settings_form($form);
+}
+
+
+

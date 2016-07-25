@@ -1,0 +1,49 @@
+<?php
+
+function form_example_schema() {
+  $schema = array();
+  $schema['user'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'The base table for nodes.',
+    'fields' => array(
+      'user_id' => array(
+        'description' => 'The primary identifier for a User.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'user_name' => array(
+        'description' => 'This is a name user.',
+         'type' => 'varchar',
+        'length' => 1000,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+        'user_phone'   => array(
+        'description'  => 'This is a phone user.',
+        'type'         => 'int',
+        'unsigned'     => TRUE,
+        'not null'     => TRUE,
+        'default'      => '0',
+      ),
+      'user_gender' => array(
+        'description' => 'This is a gender user.',
+	'type' => 'int',
+      	'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'user_info' => array(
+        'description' => 'This is an infomation user.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+   
+
+    'primary key' => array('user_id'),
+  );
+  return $schema;
+}

@@ -1,0 +1,109 @@
+<?php
+/**
+  *Implements hook_permisstion().
+*/
+function form_example_permission() {
+  return array(
+    'administer user' => array(
+      'title' => t('Administer Cronmonitor'),
+      'description' => t('Perform administration tasks for Cronmonitor.'),
+    ),
+  );
+}
+/**
+  *Implements hook_menu().
+*/
+ function form_example_menu() {
+    $items['form-user'] = array(
+      'title'            => 'Form User',
+      'type'             => MENU_NORMAL_ITEM,
+      'page callback'    => 'drupal_get_form',
+      'page arguments'   => array('form_example_user_form'),
+      'access arguments' => array('administer user'),
+    );
+    return $items;
+  }
+/**
+  *Administer form for Cron Monitor.
+*/
+
+function form_example_user_form($form, &$form_state)
+{
+	$form['user_name'] = array(
+	'#type'          =>'textfield', 
+	'#title'         => t('Your Name'),
+	'#description'   => t('Please enter your name'),
+        '#required'      => TRUE,
+
+);
+	$form['selected'] = array(
+       '#type' => 'select',
+       '#title' => t('Selected'),
+       '#options' => array(
+          0 => t('Male'),
+          1 => t('Female'),
+       ),
+       '#required'      => TRUE,
+       '#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
+   );
+	
+  $form['user_phone'] = array(
+	'#type'          =>'textfield', 
+	'#title'         => t('Your Phone'),
+	'#description'   => t('Please enter your phone'),
+        '#required'      => TRUE,
+   );
+  
+	
+$form['user_info'] = array(
+'#title' 
+=> t('Your Information'),
+
+'#type' => 'textarea',
+'#default_value'  => '',
+'#description' => t
+('Please enter your information'),
+'#required'       => TRUE,
+
+);
+$form['user_submit'] = array(
+	'#type'  => 'submit',
+	'#value' => T('Add'),
+);
+	return $form;
+}
+
+function form_example_user_form_validate($form,&$form_state)
+{
+  //print('<pre>'.  print_r($form_state['values'],1) .'</pre>');die();
+  if(!is_numeric($form_state['values']['user_phone']))
+  {
+    form_set_error('user_phone', t('Please enter your phone is number'));
+      return false;
+  }
+    if(strlen($form_state['values']['user_phone']) > 12)
+  {
+    form_set_error('user_phone', t('Please enter your phone is vaild smaller 12 characters'));
+      return false;
+  }
+    return true;
+    
+}
+
+function form_example_user_form_submit($form,&$form_state){
+  $user_id = db_insert('user')
+  ->fields(array(
+    'user_name'   => $form_state['values']['user_name'],
+    'user_gender' => $form_state['values']['selected'],
+    'user_phone'  => $form_state['values']['user_phone'],
+    'user_info'  => $form_state['values']['user_info']
+  ))
+  ->execute();
+   drupal_get_messages(t('You add Form User success'));
+      
+}
+
+
+
+
+

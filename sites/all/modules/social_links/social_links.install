@@ -1,0 +1,49 @@
+<?php
+function social_links_schema() {
+  $schema = array();
+  $schema['sociallinks'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'The base table for nodes.',
+    'fields' => array(
+      'social_id' => array(
+        'description' => 'The primary identifier for Social Links.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'facebook' => array(
+        'description' => 'This is a social link.',
+         'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+         'twitter' => array(
+        'description' => 'This is a social link.',
+         'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+         'dribbble' => array(
+        'description' => 'This is a social link.',
+         'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+         'linkedin' => array(
+        'description' => 'This is a social link.',
+         'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+ 
+    ),
+   
+
+    'primary key' => array('social_id'),
+  );
+  return $schema;
+}

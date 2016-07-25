@@ -1,0 +1,7 @@
+name = social_links
+description = Social Links
+core = 7.x
+package = 
+php = 
+version =
+dependencies[] = 

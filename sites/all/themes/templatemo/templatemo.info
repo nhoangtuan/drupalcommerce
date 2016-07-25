@@ -1,0 +1,61 @@
+
+name = Templatemo
+description = This is Templatemo
+package = Core
+version = VERSION
+core = 7.x
+stylesheets[all][]  = css/animate.css
+stylesheets[all][]  = css/bootstrap.min.css
+stylesheets[all][]  = css/font-awesome.css
+stylesheets[all][]  = css/templatemo_misc.css
+stylesheets[all][]  = css/templatemo_style.css
+
+
+scripts[]           = js/min/main.min.js
+scripts[]           = js/min/plugins.min.js
+scripts[]           = js/vendor/jquery.gmap3.min.js
+scripts[]           = js/vendor/modernizr-2.6.1-respond-1.1.0.min.js
+scripts[]           = js/vendor/jquery-1.11.0.min.js
+scripts[]           = js/bootstrap.js
+scripts[]           = js/main.js
+scripts[]           = js/main.min.js
+scripts[]           = js/plugins.js
+scripts[]           = js/plugins.min.js
+
+regions[page_top]    = Page Top
+regions[slideshow]   = Slide Show
+regions[services]    = Services
+regions[portfolio]   = Portfolio
+regions[content]     = Content
+regions[our_team]    = Our Team
+regions[our_skill]   = Our Skill
+regions[contact]     = Contact
+regions[footer]      = Footer  
+
+
+; Information added by Drupal.org packaging script on 2016-07-07
+version = "7.50"
+project = "drupal"
+datestamp = "1467918493"
+
+
+fa fa-file-code-o|Paper Code
+Paper Plane|fa fa-paper-plane-o|Paper Plane
+Home|fa fa-institution|Home
+Flask|fa fa-flask|Flask
+Hourlass|fa fa-hourglass-end|Hourlass
+Lightbulb|fa fa-lightbulb-o|Lightbulb
+Diamond|fa fa-diamond|Diamond
+Coffe|fa fa-coffee|Coffe
+
+
+
+fa fa-file-code-o|Paper Code
+fa fa-paper-plane-o|Paper Plane
+fa fa-institution|Home
+fa fa-flask|Flask
+fa fa-trophy|Trophy
+fa fa-lightbulb-o|Lightbulb
+fa fa-thumbs-o-up|Like
+fa fa-coffee|Coffe
+

@@ -1,0 +1,7 @@
+name = Our_skills
+description = Our_skills
+core = 7.x
+package = 
+php = 
+version =
+dependencies[] = 

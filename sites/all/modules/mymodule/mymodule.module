@@ -1,0 +1,66 @@
+<?php
+
+/**
+  *This is a note
+  *My Module
+*/
+/**
+  *Implements hook_permission().
+*/
+function mymodule_permission() {
+  return array(
+    'access example' => array(
+      'title' => t('Administer my module'),
+      'description' => t('Perform administration tasks for my module.'),
+    ),
+  );
+}
+/**
+  *Implements hook_menu().
+*/
+
+function mymodule_menu() {
+   $items['example'] = array(
+    'title' => 'Example Page',
+    'page callback' => 'example_page',
+    'access arguments' => array('access example'),
+    	
+  );
+    return $items;
+  }
+/**
+  *Callback function mymodule_menu().
+*/
+function example_page()
+{
+	return '<b>This is my Name</b>';
+}
+
+/**
+  *Implements hook_block_info().
+*/
+function mymodule_block_info()
+{
+	$blocks['mymodule'] = array(
+		'info' => t('My module test'),	
+
+	);
+	return $blocks;
+}
+
+/**
+  *Implements hook_block_views().
+*/
+function mymodule_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+
+  switch ($delta) {
+    case 'mymodule':
+      $block['subject'] = t('My Module');
+      $block['content'] = '<b>Hello</b> World';
+      
+      break;
+  }
+  return $block;
+}

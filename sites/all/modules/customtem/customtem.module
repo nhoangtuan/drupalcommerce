@@ -1,0 +1,169 @@
+<?php
+
+//
+
+/**
+ * Implement hook_block_info 
+ */
+function customtem_block_info() {
+  // This example comes from node.module.
+  $blocks['services'] = array(
+      'info' => t('Servicessss'),
+      'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['porfolio'] = array(
+      'info' => t('PortFolio'),
+      'cache' => DRUPAL_NO_CACHE,
+      //DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['our_team'] = array(
+      'info' => t('Our Team'),
+      //DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['contact'] = array(
+      'info' => t('Contact Form'),
+      //DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['slideshow'] = array(
+      'info' => t('Slide Show'),
+      //DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  return $blocks;
+}
+
+/**
+ * Implement hook_block_view 
+ */
+function customtem_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+  switch ($delta) {
+    case 'services':
+      $items_ser = customtem_get_out_service();
+      $block['subject'] = t('');
+      $block['content'] = theme('theme_display_t', array('sv' => $items_ser));
+      break;
+    case 'porfolio':
+      $items_po = customtem_get_out_porfolio();
+      $block['subject'] = t('');
+      $block['content'] = theme('portfolio_t', array('po' => $items_po));
+      break;
+    case 'our_team':
+
+      $items_team = customtem_get_out_ourteam();
+      $block['subject'] = t('');
+      $block['content'] = theme('ourteam_t', array('team' => $items_team));
+      break;
+
+    case 'slideshow':
+      $items_ss = customtem_get_out_slideshow();
+      $block['subject'] = t('');
+      $block['content'] = theme('slideshow_t', array('ss' => $items_ss));
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implement hook_theme
+ */
+function customtem_theme($existing, $type, $theme, $path) {
+  return array(
+      'theme_display_t' => array(
+          'template' => 'template/teamplate', //leave off tpl.php
+          'variables' => array(),
+      ),
+      'portfolio_t' => array(
+          'template' => 'template/portfolio', //leave off tpl.php
+          'variables' => array(),
+      ),
+      'ourteam_t' => array(
+          'template' => 'template/ourteam', //leave off tpl.php
+          'variables' => array(),
+      ),
+      'slideshow_t' => array(
+          'template' => 'template/slideshow', //leave off tpl.php
+          'variables' => array(),
+      ),
+  );
+}
+
+function customtem_get_out_service() {
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'))
+      ->fields('n', array('title'))
+      ->fields('fdfsc', array('field_service_icon_value'))
+      ->fields('fdfs', array('field_service_color1_value'))
+      ->fields('fdb', array('body_value'));
+  $query->condition('n.type', 'services');
+  $query->join('field_data_field_service_color1', 'fdfs', 'n.nid = fdfs.entity_id');
+  $query->join('field_data_field_service_icon', 'fdfsc', ' fdfs.entity_id = fdfsc.entity_id');
+  $query->join('field_data_body', 'fdb', 'n.nid = fdb.entity_id');
+
+  $result = $query->execute()->fetchAll();
+  return $result;
+}
+
+function customtem_get_out_porfolio() {
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'))
+      ->fields('n', array('title'))
+      ->fields('fm', array('uri'));
+  $query->condition('n.type', 'portfolio');
+  $query->join('field_data_field_image', 'fr', 'n.nid = fr.entity_id');
+  $query->join('file_managed', 'fm', 'fm.fid = fr.field_image_fid');
+  $result = $query->execute()->fetchAll();
+  return $result;
+}
+
+function customtem_get_out_ourteam() {
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'))
+      ->fields('n', array('title'))
+      ->fields('fm', array('uri'))
+      ->fields('ttd', array('name'));
+  $query->condition('n.type', 'member');
+  $query->join('taxonomy_index', 'ti', 'n.nid = ti.nid');
+  $query->join('taxonomy_term_data', 'ttd', 'ti.tid = ttd.tid');
+  $query->join('field_data_field_image', 'fr', 'n.nid = fr.entity_id');
+  $query->join('file_managed', 'fm', 'fm.fid = fr.field_image_fid');
+  $result = $query->execute()->fetchAll();
+  return $result;
+}
+
+function customtem_get_out_slideshow() {
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'))
+      ->fields('n', array('title'));
+    $query->condition('n.type', 'slideshow');
+  $result = $query->execute()->fetchAll();
+  return $result;
+}
+
+//function info_settings_form($form, &$form_state) {
+//  $form = array();
+//
+//  $form['info_hotline_1'] = array(
+//      '#type' => 'textfield',
+//      '#title' => t('Hotline 1'),
+//      '#default_value' => variable_get('info_hotline_1'),
+//      '#required' => TRUE,
+//  );
+//
+//  $form['info_name_hotline_1'] = array(
+//      '#type' => 'textfield',
+//      '#title' => t('Name Hotline 1'),
+//      '#default_value' => variable_get('info_name_hotline_1'),
+//      '#required' => TRUE,
+//  );
+//
+//  $form['info_hotline_2'] = array(
+//      '#type' => 'textfield',
+//      '#title' => t('Hotline 2'),
+//      '#default_value' => variable_get('info_hotline_2'),
+//      '#required' => TRUE,
+//  );
+//
+//  return system_settings_form($form);
+//}

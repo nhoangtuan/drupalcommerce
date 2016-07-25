@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * Implements hook_permisstion().
+ */
+function social_links_permission() {
+  return array(
+      'administer skillsss' => array(
+          'title' => t('Form Skills'),
+          'description' => t('Perform administration tasks for Form Skills.'),
+      ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function social_links_menu() {
+  $items['social'] = array(
+      'title' => 'Social Links',
+      'type' => MENU_NORMAL_ITEM,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('social_links_form'),
+      'access arguments' => array('administer skillsss'),
+  );
+
+  return $items;
+}
+
+/**
+ *
+ */
+function social_links_form($form, &$form_state) {
+  $query = db_select('sociallinks', 'our');
+  $query->fields('our', array('facebook'))
+      ->fields('our', array('twitter'))
+      ->fields('our', array('dribbble'))
+      ->fields('our', array('linkedin'));
+  $result = $query->execute()->fetchAll();
+//  var_dump($result);
+//   die();
+  $form['facebook'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Facebok'),
+      '#description' => t('facebook'),
+      //'default_value' => '<?php echo $result['facebook']
+      '#required' => TRUE,
+  );
+  $form['twitter'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link twitter'),
+      '#required' => TRUE,
+  );
+  $form['dribbble'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link dribbble'),
+      '#required' => TRUE,
+  );
+  $form['linkedin'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link linkedin'),
+      '#required' => TRUE,
+  );
+  $form['social_submit'] = array(
+      '#type' => 'submit',
+      '#value' => T('Update Links'),
+  );
+  return $form;
+}
+
+function social_links_custom_theme() {
+  if (arg(0) == 'social') {
+    return 'seven';
+  }
+}
+
+//
+//function social_links_form_submit($form,&$form_state){
+//  
+//  $social_id = db_update('sociallinks')
+//  ->fields(array(
+//    'facebook'    => $form_state['values']['facebook'],
+//    'twitter'     => $form_state['values']['twitter'],
+//    'dribbble'    => $form_state['values']['dribbble'],
+//    'linkedin'    => $form_state['values']['linkedin'],
+//  ))
+//  ->execute();
+//   drupal_get_messages(t('You update success'));
+//      
+//}

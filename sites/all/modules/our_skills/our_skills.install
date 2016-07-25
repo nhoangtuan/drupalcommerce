@@ -1,0 +1,40 @@
+<?php
+
+function our_skills_schema() {
+  $schema = array();
+  $schema['ourskills'] = array(
+      // Example (partial) specification for table "node".
+      'description' => 'The base table for nodes.',
+      'fields' => array(
+          'skill_id' => array(
+              'description' => 'The primary identifier for a Skill.',
+              'type' => 'serial',
+              'unsigned' => TRUE,
+              'not null' => TRUE,
+          ),
+          'skill_name' => array(
+              'description' => 'This is a name skill.',
+              'type' => 'varchar',
+              'length' => 100,
+              'not null' => TRUE,
+              'default' => '',
+          ),
+          'skill_number' => array(
+              'description' => 'This is a skill number.',
+              'type' => 'int',
+              'unsigned' => TRUE,
+              'not null' => TRUE,
+              'default' => '0',
+          ),
+          'skill_info' => array(
+              'description' => 'This is an infomation skill.',
+              'type' => 'varchar',
+              'length' => 2000,
+              'not null' => TRUE,
+              'default' => '',
+          ),
+      ),
+      'primary key' => array('skill_id'),
+  );
+  return $schema;
+}
